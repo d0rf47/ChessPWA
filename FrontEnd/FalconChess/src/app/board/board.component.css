@@ -9,8 +9,8 @@
     width: 100%;
     aspect-ratio: 1/1;
     border: solid black 1px;
-    grid-template-columns: auto auto auto auto auto auto auto auto;
-    grid-template-rows: auto auto auto auto auto auto auto auto;
+    grid-template-columns:  repeat(8, minmax(0, 1fr));
+    grid-template-rows: repeat(8, minmax(0, 1fr));
     grid-gap: 0;
   }
   

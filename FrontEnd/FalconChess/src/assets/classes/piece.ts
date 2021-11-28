@@ -188,12 +188,13 @@ export class Piece
         let oppPotentialMoves = Piece.checkPotentialMoves(board, board.lastPiece);
         for(let oPm of oppPotentialMoves)
         {
-
+            console.log(oPm)
+            console.log(board.tiles[oPm.row][oPm.col].element)
             if(board.tiles[oPm.row][oPm.col].element.firstChild)
             {
                 let elem = board.tiles[oPm.row][oPm.col].element.children[0];
-                console.log(elem)
-                if(elem.getAttribute('data-type') === 'king')
+                // console.log(elem)
+                if(elem.getAttribute('data-type') === 'k')
                     return false;
             }
         };

@@ -11,41 +11,44 @@ body {
 
 .light
 {
-    color:#7986cb !important;
+  color:#7986cb !important;
 }
 
 .dark
 {
-    color: black;
+  color: black;
 }
 
 .black
 {
-    background-color: #4527a0 !important;
-    color: whitesmoke !important;
+  background-color: #4527a0 !important;
+  color: whitesmoke !important;
 }
 
 .check
 {
-    color: red;
+  color: red !important;
 }
 
 .fas
 {
-    cursor: pointer;    
+  cursor: pointer;    
 }
 
 
 .overlay-effect 
 {    
-    transition: .5s ease;
-    background-color: rgba(259, 67, 95, 0.7) !important;    
+  transition: .2s ease;
+  background-color: rgba(259, 67, 95, 0.5) !important;    
+  border: solid rgba(259, 67, 95, 1) !important;    ;
 }
 
-.checkPulse {
-    animation:checkPulse 5s ease infinite;
-  }
-  @keyframes checkPulse {
+.checkPulse 
+{
+  animation:checkPulse 5s ease infinite;
+}
+  @keyframes checkPulse 
+  {
     0% {
       transform:scale(1);
     }
@@ -69,5 +72,31 @@ body {
     }
     70% {
       transform:scale(1);
-    }
+    }    
   }
+
+  @media screen and (min-width: 1500px ) 
+  {
+      .gamepiece
+      {
+        font-size: 2em !important;
+      }
+  }
+
+  @media screen and (min-width: 1200px ) 
+  {
+      .gamepiece
+      {
+        font-size: 1.8em !important;
+      }
+  }
+
+  @media screen and (min-width: 1000px ) 
+  {
+      .gamepiece
+      {
+        font-size: 2em !important;
+      }
+  }
+
+  

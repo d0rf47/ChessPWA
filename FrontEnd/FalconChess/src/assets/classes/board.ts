@@ -142,7 +142,7 @@ export class Board
 
     validTurn(currPiece :Piece)
     {
-        console.log(currPiece, this.currentTeam)
+        // console.log(currPiece, this.currentTeam)
         return this.currentTeam.team === currPiece.team;
     }
 
@@ -279,7 +279,7 @@ export class Board
     // has to exist outside of piece due to circular dependency
     static generateDerviedObject(piece :Piece)
     {
-        console.log(piece);
+        // console.log(piece);
         let temp :Piece;
         switch(piece.type)
         {

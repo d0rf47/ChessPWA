@@ -103,12 +103,13 @@ export class Rook extends Piece
     checkCastleMoves(board :Board)
     {
         let king = board.lightPieces.filter( p => p.type === PieceType.king )[0];
+        
         let potentialMoves = [];        
         if(!this.moved)
         {            
             if(this.team === 'dark')
                 king = board.darkPieces.filter( p => p.type === PieceType.king )[0];
-                
+            console.log(king);                
             if(!king.moved)
             {
                 if(king.index.col > this.index.col)

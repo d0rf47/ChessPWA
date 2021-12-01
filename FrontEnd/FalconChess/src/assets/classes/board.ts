@@ -48,7 +48,7 @@ export class Board
 
     initLightPieces() :void
     {
-        console.log("init pieces")
+        // console.log("init pieces")
         //place pawns first
         let ascii = 97;
         for(let i = 1; i <= 8; i++) 
@@ -147,7 +147,7 @@ export class Board
         return this.currentTeam.team === currPiece.team;
     }
 
-    updatePositions(targetElement, piece, castleMove, castleIcon)
+    updatePositions(targetElement, piece, castleMove :boolean, castleIcon)
     {
 
         //add method to check all peiece per team
@@ -180,19 +180,19 @@ export class Board
                 j++;
                 x = 0;
             }                  
-        }        
-        //need to update pieces [] casues issue with checking for Check
+        }                
         if(castleMove)
         {
             let castlePiece = JSON.parse(window.atob(castleIcon.getAttribute('data-object')));
-            console.log(this.currentTeam);
-            for(let p of this.currentTeam.pieces)
+            console.log(this.currentTeam, castlePiece);//something here not working right with updating piece positions
+            for(let i = 0; i < this.currentTeam.pieces.length; i++)
             {
-                if(p.index === castlePiece.index)
+                if(this.currentTeam.pieces[i].index.col === castlePiece.index.col && this.currentTeam.pieces[i].index.row === castlePiece.index.row)
                 {
-                    p.index = piece.index;
-                    p.moved = true;
-                    p.position = piece.position
+                    this.currentTeam.pieces[i].index = piece.index;
+                    this.currentTeam.pieces[i].moved = true;
+                    this.currentTeam.pieces[i].position = piece.position;
+                    break;
                 }
             }
             castlePiece.moved = true;
@@ -200,13 +200,17 @@ export class Board
             castlePiece.position = piece.position;
             castleIcon.setAttribute("data-object", window.btoa(JSON.stringify(castlePiece)));
         }
-        for(let p of this.currentTeam.pieces)
+        for(let i = 0; i < this.currentTeam.pieces.length; i++)
         {
-            if(p.index === piece.index)
+            console.log(this.currentTeam.pieces[i], piece)// issue with logic here
+            if(this.currentTeam.pieces[i].index.col === piece.index.col 
+                && this.currentTeam.pieces[i].index.row === piece.index.row
+                && this.currentTeam.pieces[i].type === piece.type)
             {
-                p.index = piece.index;
-                p.moved = true;
-                p.position = piece.position
+                this.currentTeam.pieces[i].index = piece.index;
+                this.currentTeam.pieces[i].moved = true;
+                this.currentTeam.pieces[i].position = piece.position;
+                break;
             }
         }
         piece.moved = true;
@@ -215,11 +219,15 @@ export class Board
         piece.position = targetElement.id;
         this.pieceToMoveElement.setAttribute("data-object", window.btoa(JSON.stringify(piece)));
         this.lastPiece = piece;            
-
+        
         if(this.currentTeam.inCheck)
         {
             this.removeCheck();
         }
+        if(this.currentTeam.team === 'light')
+            this.lightPieces = this.currentTeam.pieces;
+        else
+            this.darkPieces = this.currentTeam.pieces;
     }
 
     inCurrCheck()

@@ -206,4 +206,14 @@ export class Piece
         return true;
     }
     
+    canCastle() :boolean
+    {
+        if(this.type === PieceType.king || this.type !== PieceType.rook)
+        {
+            if(!this.moved)
+                return true;
+        }
+
+        return false;
+    }    
 }

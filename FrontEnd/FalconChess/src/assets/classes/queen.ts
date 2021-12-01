@@ -15,9 +15,9 @@ export class Queen extends Piece
     
     override checkMoves(board :Board, piece :Piece)
     {
-        let temp = new Bishop("", "", "");
-        let potentialMoves = temp.checkMoves(board, piece);   
-        temp = new Rook("", "", "");
-        return potentialMoves.concat(temp.checkMoves(board, piece));  
+        let rook = new Rook("", "", "");
+        let potentialMoves = rook.checkStandardMoves(board, piece);   
+        let bishop = new Bishop("", "", "");
+        return potentialMoves.concat(bishop.checkMoves(board, piece));  
     }
 }

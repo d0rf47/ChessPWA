@@ -39,7 +39,7 @@ export class Knight extends Piece
             }            
         }
         //backward check
-        if(row + verTMovement <= 8)
+        if(row + verTMovement <= 7)
         {
             //left check
             if(col - horzMovment >= 0)

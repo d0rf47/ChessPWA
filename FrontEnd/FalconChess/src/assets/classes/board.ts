@@ -21,10 +21,9 @@ export class Board
 
     constructor()
     {        
-        this.lightPieces = new Array(16);
-        this.darkPieces = new Array(16);
-        this.tiles = [...Array(8)].map(x=>Array(8).fill(undefined));
-        this.currentTeam.pieces = this.lightPieces;
+        this.lightPieces = [];
+        this.darkPieces = [];
+        this.tiles = [...Array(8)].map(x=>Array(8).fill(undefined));        
     }
 
     initBoard() :void
@@ -76,6 +75,8 @@ export class Board
         this.tiles[0][3].occupied = true;
         this.lightPieces.push(new Piece(PieceType.king, "1e" ,"light" , {row: 7, col: 4}));     
         this.tiles[0][4].occupied = true;
+
+        this.currentTeam.pieces = this.lightPieces;
     }
 
     initdarkPieces()
@@ -128,7 +129,7 @@ export class Board
     }
 
     isOccupied(row: number,col :number)
-    {
+    {        
         return this.tiles[row][col].occupied;
     };
 
@@ -146,7 +147,7 @@ export class Board
         return this.currentTeam.team === currPiece.team;
     }
 
-    updatePositions(targetElement, piece)
+    updatePositions(targetElement, piece, castleMove, castleIcon)
     {
 
         //add method to check all peiece per team
@@ -159,38 +160,66 @@ export class Board
         let x = 0;    
         for (let i = 0; i < 64; i++) 
         {      
-            if(this.tiles[j][x].location === piece.position)
+            if(this.tiles[j][x].location === piece.position && !castleMove)
             {
                 this.tiles[j][x].occupied = false;
             }
             if(this.tiles[j][x].location === targetElement.id)
             {
                 this.tiles[j][x].occupied = true;
-                if(targetElement.firstChild)
+                if(targetElement.firstChild && !castleMove)
                 {                    
                     let pieceToRemove = JSON.parse(window.atob(targetElement.firstChild.getAttribute('data-object')));
                     console.log("peice to REMOVE",pieceToRemove);
                     targetElement.removeChild(targetElement.childNodes[0]);                                        
                 }
-            }            
-                        
+            }                                    
             //counter for array traversal
             x++;    
             if(i === 7 || i === 15 || i === 23 || i === 31 || i === 39 || i === 47 || i === 55 ) {
                 j++;
                 x = 0;
             }                  
-        }
-            piece.moved = true;
-            const dataIndex = targetElement.getAttribute('data-index');
-            piece.index = {row : parseInt(dataIndex[0]), col : parseInt(dataIndex[2]) };
-            piece.position = targetElement.id;
-            this.pieceToMoveElement.setAttribute("data-object", window.btoa(JSON.stringify(piece)));
-            this.lastPiece = piece;
-            if(this.currentTeam.inCheck)
+        }        
+        //need to update pieces [] casues issue with checking for Check
+        if(castleMove)
+        {
+            let castlePiece = JSON.parse(window.atob(castleIcon.getAttribute('data-object')));
+            console.log(this.currentTeam);
+            for(let p of this.currentTeam.pieces)
             {
-                this.removeCheck();
+                if(p.index === castlePiece.index)
+                {
+                    p.index = piece.index;
+                    p.moved = true;
+                    p.position = piece.position
+                }
             }
+            castlePiece.moved = true;
+            castlePiece.index = piece.index;
+            castlePiece.position = piece.position;
+            castleIcon.setAttribute("data-object", window.btoa(JSON.stringify(castlePiece)));
+        }
+        for(let p of this.currentTeam.pieces)
+        {
+            if(p.index === piece.index)
+            {
+                p.index = piece.index;
+                p.moved = true;
+                p.position = piece.position
+            }
+        }
+        piece.moved = true;
+        const dataIndex = targetElement.getAttribute('data-index');
+        piece.index = {row : parseInt(dataIndex[0]), col : parseInt(dataIndex[2]) };
+        piece.position = targetElement.id;
+        this.pieceToMoveElement.setAttribute("data-object", window.btoa(JSON.stringify(piece)));
+        this.lastPiece = piece;            
+
+        if(this.currentTeam.inCheck)
+        {
+            this.removeCheck();
+        }
     }
 
     inCurrCheck()

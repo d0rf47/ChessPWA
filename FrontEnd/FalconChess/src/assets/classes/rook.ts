@@ -13,6 +13,13 @@ export class Rook extends Piece
     
     override checkMoves(board :Board, piece :Piece)
     {
+        let potentialMoves = this.checkStandardMoves(board,piece);             
+        potentialMoves = potentialMoves.concat(this.checkCastleMoves(board));
+        return potentialMoves;
+    }
+
+    checkStandardMoves(board :Board, piece :Piece)
+    {
         let tile = board.locateTile(piece.position);
         // console.log("rook piece: ", piece)
         // console.log("rook tile", tile);
@@ -89,7 +96,36 @@ export class Rook extends Piece
                 break;            
         }
 
-        //last thing in method // concat req cause used for queen        
+        //last thing in method     
         return potentialMoves;
+    }
+
+    checkCastleMoves(board :Board)
+    {
+        let king = board.lightPieces.filter( p => p.type === PieceType.king )[0];
+        let potentialMoves = [];        
+        if(!this.moved)
+        {            
+            if(this.team === 'dark')
+                king = board.darkPieces.filter( p => p.type === PieceType.king )[0];
+                
+            if(!king.moved)
+            {
+                if(king.index.col > this.index.col)
+                {
+                    if(!board.isOccupied(this.index.row, this.index.col + 1) 
+                    && !board.isOccupied(this.index.row, this.index.col + 2)
+                    && !board.isOccupied(this.index.row, this.index.col + 3))
+                        potentialMoves.push({row: this.index.row, col: king.index.col});
+                }else
+                {
+                    if(!board.isOccupied(this.index.row, this.index.col - 1) 
+                    && !board.isOccupied(this.index.row, this.index.col - 2))                  
+                        potentialMoves.push({row: this.index.row, col: king.index.col});
+                }
+            }            
+        }
+        console.log(potentialMoves);
+        return potentialMoves;        
     }
 }

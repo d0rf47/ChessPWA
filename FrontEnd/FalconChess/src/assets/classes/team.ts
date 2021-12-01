@@ -6,7 +6,7 @@ export class Team
     inCheck = false;    
     inCheckMate = false;
     inStaleMate = false;
-    pieces = Array<Piece>();
+    pieces = Piece[16];
 
     constructor(){};
 }

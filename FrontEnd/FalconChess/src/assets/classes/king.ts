@@ -1,6 +1,7 @@
 import { Board } from "./board";
 import { Piece } from "./piece";
 import { PieceType } from "./pieceTypeEnum";
+import { Rook } from "./rook";
 
 export class King extends Piece
 {
@@ -17,7 +18,7 @@ export class King extends Piece
         // console.log("king tile", tile);
         const row = tile.index.row;
         const col = tile.index.col;
-        let potentialMoves = [];   
+        let potentialMoves = this.checkCastleMoves(board);
         
         //forward
         if(board.isInBound(row - 1) && board.canMove(row - 1, col, piece))
@@ -44,7 +45,42 @@ export class King extends Piece
         if(board.isInBound(row + 1) && board.isInBound(col + 1) && board.canMove(row + 1, col + 1, piece))
             potentialMoves.push({row: row + 1, col : col + 1});
 
-        //last thing in method        
+        
+        //last thing in method                
         return potentialMoves; 
+    }
+
+    checkCastleMoves(board :Board)
+    {
+        let rooks = [];
+        let potentialMoves = [];        
+        if(!this.moved)
+        {
+            if(this.team === 'light')        
+                rooks = board.lightPieces.filter( p => p.type === PieceType.rook );
+            else
+                rooks = board.darkPieces.filter( p => p.type === PieceType.rook );
+        
+            rooks.forEach((r :Rook) =>
+            {
+                if(!r.moved)
+                {
+                    if(r.index.col > this.index.col)
+                    {
+                        
+                        if(!board.isOccupied(this.index.row, this.index.col + 1) 
+                        && !board.isOccupied(this.index.row, this.index.col + 2))
+                            potentialMoves.push({row: this.index.row, col: r.index.col});
+                    }else
+                    {
+                        if(!board.isOccupied(this.index.row, this.index.col - 1) 
+                        && !board.isOccupied(this.index.row, this.index.col - 2)
+                        && !board.isOccupied(this.index.row, this.index.col - 3))
+                            potentialMoves.push({row: this.index.row, col: r.index.col});
+                    }
+                }
+            });
+        }
+        return potentialMoves;        
     }
 }
